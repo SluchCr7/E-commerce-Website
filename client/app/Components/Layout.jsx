@@ -6,12 +6,14 @@ import AuthContextProvider from '../Context/authContext';
 import Footer from "../Components/Footer";
 import Search from './Search';
 import { useState  , useEffect} from 'react';
+import { VerifyContextProvider } from '../Context/verifyContext';
 // import { useLocation } from 'react-router-dom';
 const Layout = ({ children }) => {
     const [search, setSearch] = useState(false)
     const [searchValue, setSearchValue] = useState("")
   return (
     <div>
+      <VerifyContextProvider>
       <AuthContextProvider>
         <ShopContextProvider>
           <Nav setSearch={setSearch} search={search}/>
@@ -19,7 +21,8 @@ const Layout = ({ children }) => {
           {children}
           <Footer />
         </ShopContextProvider>
-      </AuthContextProvider>
+        </AuthContextProvider>
+        </VerifyContextProvider>
     </div>
   )
 }

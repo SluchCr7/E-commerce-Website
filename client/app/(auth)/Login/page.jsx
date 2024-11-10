@@ -26,7 +26,7 @@ const page = () => {
                 <label htmlFor="" className='absolute bg-ModeOne-primary dark:bg-ModeTwo-primary text-ModeOne-text dark:text-ModeTwo-text text-xs left-[10px] top-[-7px]'>Password</label>
             </div>
             <div className='w-[400px] flex items-center justify-between'>
-              <span className='text-sm text-ModeOne-text dark:text-ModeTwo-text'>Forget Your password</span>
+              <Link href={"../Forget"} className='text-sm text-ModeOne-text dark:text-ModeTwo-text'>Forget Your password</Link>
               <Link href={"../SignUp"} className='text-sm text-ModeOne-secondary dark:text-ModeTwo-secondary'>Create Account</Link>
             </div>
             <button className='border-[1px] text-ModeOne-text dark:text-ModeTwo-text uppercase tracking-[3px] border-ModeOne-third dark:border-ModeTwo-third w-[400px] p-3 rounded-md'>Login</button>

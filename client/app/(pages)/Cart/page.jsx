@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link'
 import { shopContext } from '../../Context/ShopContext'
 import { useRouter } from 'next/navigation'
+import Title from '../../Components/Title'
 const page = () => {
   const { products, currancy, productCart  ,calcTotal,delivery_fee, removeFromCart} = useContext(shopContext)
   const [productsCartArr, setProductsCartArr] = useState([])

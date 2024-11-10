@@ -1,7 +1,10 @@
 const asyncHandler = require('express-async-handler')
 const jwt = require("jsonwebtoken"); 
 const { User, validateUser, UpdateUser , LoginValidate } = require('../Modules/User')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const VerificationToken = require('../Modules/VerificationToken');
+const sendMail = require('../utils/sendMail')
+const crypto = require('crypto')
 /**
  * @desc Register new user
  * @route POST /api/auth/register
@@ -22,8 +25,22 @@ const registerUser = asyncHandler(async (req, res) => {
         password: hashedPassword
     })
     await user.save()
+
+    // send email to user
+    const verificationToken = new VerificationToken({
+        userId: user._id,
+        token: crypto.randomBytes(32).toString('hex')
+    })
+    await verificationToken.save()
+    const link = `${process.env.DOMAINNAME}/User/${user._id}/verify/${verificationToken.token}`
+    const html = `
+        Verify your email by:
+        click in this link <a href=${link}>Verify</a> to verify your email
+        and go to the login page and start Shopping and enjoy
+    `
+    sendMail(user.email, 'Verify Email', html)
     // const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET)
-    res.status(200).json({ message  : 'User created'})
+    res.status(200).json({ message  : 'Verification link sent to your email address , please verify your email' })
 })
 
 /**
@@ -39,8 +56,32 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!user) return res.status(400).send('Invalid email or password')
     // check if password is correct
     const validPassword = await bcrypt.compare(req.body.password, user.password)
-    if (!validPassword) return res.status(400).send('Invalid email or password')
-    // create and assign a token
+    if (!validPassword) {
+        return res.status(400).send('Invalid email or password')
+    }
+    // check if user is verified
+    if (!user.isVerified) {
+        let verificationToken = await VerificationToken.findOne({
+            userId: user._id,
+        })
+        if (!verificationToken) {
+            verificationToken = new VerificationToken({
+                userId: user._id,
+                token: crypto.randomBytes(32).toString('hex'),
+            })
+            await verificationToken.save()
+        }
+        const link = `${process.env.DOMAINNAME}/User/${user._id}/verify/${verificationToken.token}`
+        const html = `
+        <div>
+            <h1>Please click on the link to verify your email</h1>
+            <a href=${link}>${link}</a>
+        </div>
+        `
+        sendMail(user.email, 'Verify Email', html)
+        return res.status(400).send('Please verify your email')
+    }
+        // create and assign a token
     const token = jwt.sign({ _id: user._id , isAdmin: user.isAdmin }, process.env.SECRETKEY);
     const { password, ...others } = user._doc
     res.send({ ...others, token });
@@ -81,6 +122,7 @@ const UpdateUserProfile = asyncHandler(async (req, res) => {
         }
     }, { new: true })
     await user.save()
+
     res.status(200).json(user)
 })
 
@@ -98,4 +140,28 @@ const getAllUsers = asyncHandler(async (req, res) => {
     const users = await User.find()
     res.status(200).json(users)
 })
-module.exports = { registerUser , loginUser , GetUserProfile , UpdateUserProfile , DeleteUser , getAllUsers }
+
+
+/**
+ * @desc verify user
+ * @route POST /api/auth/:id/verify/:token
+ * @access Public
+ */
+
+const verifyUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id)
+    if (!user) {
+        res.status(404)
+        throw new Error('User not found')
+    }
+    const verificationToken = await VerificationToken.findOne({ userId: user._id , token: req.params.token })
+    if (!verificationToken) {
+        res.status(404)
+        throw new Error('Verification token not found')
+    }
+    user.isVerified = true
+    await user.save()
+    await VerificationToken.findByIdAndDelete(verificationToken._id)
+    res.status(200).json({ message: 'Email verified' })
+})
+module.exports = { registerUser ,  verifyUser , loginUser , GetUserProfile , UpdateUserProfile , DeleteUser , getAllUsers }

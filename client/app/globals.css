@@ -53,3 +53,10 @@
     background-color: rgba(0, 0, 0, 0.5);
     height: 100vh;
 }
+.name{
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

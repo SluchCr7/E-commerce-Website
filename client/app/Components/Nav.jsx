@@ -25,6 +25,7 @@ const Nav = () => {
         "About",
         "Collection",
         "contact",
+        "PlaceOrder"
     ]
     useEffect(() => {
         const theme = localStorage.getItem("theme")

@@ -1,6 +1,6 @@
 const express = require('express')
 const route = express.Router()
-const { GetUserProfile, getAllUsers, loginUser, registerUser, DeleteUser, UpdateUserProfile } = require('../controllers/authController')
+const { GetUserProfile, getAllUsers, verifyUser, loginUser, registerUser, DeleteUser, UpdateUserProfile } = require('../controllers/authController')
 
 route.route('/register')
     .post(registerUser)
@@ -16,4 +16,7 @@ route.route('/:id')
 route.route('/')    
     .get(getAllUsers)
 
+
+route.route('/:id/verify/:token')
+    .get(verifyUser)
 module.exports = route

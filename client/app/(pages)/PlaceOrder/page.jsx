@@ -4,13 +4,9 @@ import { shopContext } from '../../Context/ShopContext'
 import { useContext , useEffect , useState} from 'react'
 import OrderDone from '@/app/Components/OrderDone'
 const page = () => {
-  const { products, currancy,calcTotal, productCart  ,delivery_fee, removeFromCart} = useContext(shopContext)
+  const {calcTotal, productCart  ,delivery_fee, removeFromCart} = useContext(shopContext)
   const [productsCartArr, setProductsCartArr] = useState([])
   const [OrderMess , setOrderMess] = useState(false)
-  // const total = productsCartArr.reduce((total , item) => {
-  //   const productsAll = products.find((product) => product._id == item.id)
-  //   return total + productsAll.price * item.count
-  // } , 0)
   useEffect(() => {
     const tempData = []
     for (let key in productCart) {
@@ -28,7 +24,7 @@ const page = () => {
     <div className='relative flex flex-col lg:flex-row p-10 items-center w-full gap-5 justify-between'>
       {
         OrderMess && (
-          <OrderDone />
+          <OrderDone setOrderMess={setOrderMess} OrderMess={OrderMess} />
         )
       }
       <div className=' w-[100%] lg:w-[60%] flex items-start flex-col gap-2'>

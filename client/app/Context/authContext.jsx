@@ -22,7 +22,7 @@ const AuthContextProvider = (props) => {
                 toast.success("Login successfully")
             })
             .catch(err => {
-                console.log(err.response.data)
+                toast.error(err.response.data)
             })
     }
     const Logout = () => {

@@ -2,11 +2,12 @@
 import React from 'react'
 import motion from 'framer-motion'
 import Image from 'next/image'
+import Title from '@/app/Components/Title'
 const page = () => {
   return (
     <>
       <div className='flex items-center bg-ModeOne-primary  dark:bg-ModeTwo-primary flex-col gap-7 w-full min-h-[70vh] p-10'>
-        <span className='flex items-center justify-center w-full text-ModeOne-text dark:text-ModeTwo-text text-xl'>About <span className='font-bold pl-2'>Sluch <span className='text-ModeOne-secondary dark:text-ModeTwo-secondary'>.</span></span></span>
+        <Title text1={'About Us'} />
         <div className='flex items-center flex-col gap-3'>
           <span className='text-ModeOne-third dark:text-ModeTwo-third text-base'>History</span>
           <p className='text-sm text-center mx-auto text-ModeOne-text dark:text-ModeTwo-text w-[70%]'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti illum exercitationem quis! Alias delectus voluptatem officiis explicabo cupiditate omnis exercitationem vitae, facere tempora deleniti necessitatibus, velit asperiores pariatur adipisci voluptatum.</p>

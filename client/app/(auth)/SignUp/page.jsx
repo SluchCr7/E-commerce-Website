@@ -19,6 +19,7 @@ const page = () => {
     })
       .then(res => {
         window.location.href = "/Login"
+        toast.success(res.data.message)
       })
       .catch(err => {
         toast.error(err.response.data.message)
@@ -26,7 +27,8 @@ const page = () => {
   })
   return (
     <div className='flex items-center gap-3 bg-ModeOne-primary dark:bg-ModeTwo-primary p-10 flex-col'>
-        <h1 className='text-ModeOne-text dark:text-ModeTwo-text font-bold text-3xl tracking-[2px]'>Sluch<span className='text-ModeOne-secondary dark:text-ModeTwo-secondary'>.</span></h1>
+        <ToastContainer />
+      <h1 className='text-ModeOne-text dark:text-ModeTwo-text font-bold text-3xl tracking-[2px]'>Sluch<span className='text-ModeOne-secondary dark:text-ModeTwo-secondary'>.</span></h1>
         <p className='text-ModeOne-text dark:text-ModeTwo-text'>Login and shopping new products and impresive collections</p>
         <form action="" className='flex items-center gap-6 flex-col py-4'>
             <div className='relative'>
